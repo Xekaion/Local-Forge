@@ -53,9 +53,6 @@ jobs:
     name: Engine / Python 3.10
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    env:
-      LOCALFORGE_BACKEND: mock
-      LOCALFORGE_RUNTIME_ROOT: ${{ runner.temp }}/localforge-runtime
 
     steps:
       - name: Check out repository
@@ -95,3 +92,6 @@ jobs:
 
       - name: Run engine tests
         run: python -m pytest -q engine/tests
+        env:
+          LOCALFORGE_BACKEND: mock
+          LOCALFORGE_RUNTIME_ROOT: ${{ runner.temp }}/localforge-runtime
