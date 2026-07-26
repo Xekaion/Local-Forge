@@ -4,5 +4,5 @@ uvicorn[standard]==0.35.0
 python-multipart==0.0.32
 pillow==12.3.0
 numpy==2.2.6
-scipy==1.15.3
+scipy==1.18.0
 trimesh==4.7.1
