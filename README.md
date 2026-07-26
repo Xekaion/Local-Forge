@@ -4,6 +4,9 @@ LocalForge is a local-first image-to-3D studio built for an RTX 5090 workstation
 The web app uploads an image to a small local engine, follows the generation
 job, previews the returned GLB, and downloads the asset.
 
+To continue this project on another RTX 5090 PC or ChatGPT/Codex account, start
+with [HANDOFF.md](HANDOFF.md).
+
 ## What works now
 
 - Image upload with local preview and validation
