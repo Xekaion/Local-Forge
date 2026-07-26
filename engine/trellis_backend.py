@@ -2,7 +2,9 @@ from __future__ import annotations
 
 import os
 import sys
+from collections.abc import Callable
 from pathlib import Path
+from typing import Any
 
 
 class TrellisBackend:
@@ -41,17 +43,29 @@ class TrellisBackend:
         output_path: Path,
         quality: str,
         remesh: bool,
+        texture: bool,
+        cancel_check: Callable[[], None] | None = None,
     ) -> None:
         import o_voxel
         from PIL import Image
 
+        checkpoint = cancel_check or (lambda: None)
+        if not texture:
+            raise ValueError("TRELLIS.2 adapter does not support texture=false yet.")
         texture_size = 2048 if quality == "draft" else 4096
         decimation_target = 350_000 if quality == "draft" else 1_000_000
-        with Image.open(image_path).convert("RGBA") as image:
-            with self._torch.inference_mode():
-                mesh = self._pipeline.run(image)[0]
+        checkpoint()
+        with (
+            Image.open(image_path).convert("RGBA") as image,
+            self._torch.inference_mode(),
+        ):
+            mesh = self._pipeline.run(image)[0]
 
+        # TRELLIS does not currently expose a safe per-denoising-step abort.
+        # Check at each stage boundary so cancellation never corrupts CUDA state.
+        checkpoint()
         mesh.simplify(16_777_216)
+        checkpoint()
         glb = o_voxel.postprocess.to_glb(
             vertices=mesh.vertices,
             faces=mesh.faces,
@@ -67,4 +81,16 @@ class TrellisBackend:
             remesh_project=0,
             verbose=True,
         )
+        checkpoint()
         glb.export(str(output_path), extension_webp=True)
+        checkpoint()
+
+    def provenance(self) -> dict[str, Any]:
+        device = self._torch.cuda.current_device()
+        properties = self._torch.cuda.get_device_properties(device)
+        return {
+            "torch": self._torch.__version__,
+            "cuda": self._torch.version.cuda,
+            "gpu": properties.name,
+            "compute_capability": list(self._torch.cuda.get_device_capability(device)),
+        }

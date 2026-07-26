@@ -12,6 +12,11 @@
 
 # testing and builds
 /coverage
+/.coverage
+/.pytest_cache/
+**/.pytest_cache/
+**/__pycache__/
+*.py[cod]
 /.next/
 /.vinext/
 /out/
@@ -33,11 +38,10 @@ yarn-error.log*
 # hosting and local work
 .vercel
 next-env.d.ts
+tsconfig.tsbuildinfo
 /outputs/
 /work/
 
 # local 3D engine
 /engine/.venv/
 /engine/runtime/
-/engine/__pycache__/
-/engine/*.pyc
