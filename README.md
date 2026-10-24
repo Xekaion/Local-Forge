@@ -23,6 +23,10 @@ with [HANDOFF.md](HANDOFF.md).
   cleanup
 - A stdlib-only CLI for generation, cancellation and verified GLB/manifest
   handoffs; `--require-real` prevents mock fixtures entering an asset pipeline
+- A separate CPU timber-surface authoring tool using verified, licensed PBR
+  photographs, metric bevelled geometry, physical UVs and an offline verifier
+- A read-only GPU/dependency/disk preflight that distinguishes research
+  candidates from installed and actually tested inference backends
 - Strict TypeScript/ESLint checks and same-origin/nosniff/frame/referrer/
   permissions headers on hosted web responses
 
@@ -143,3 +147,16 @@ and CI when Dependabot proposes an update.
 Follow [docs/RTX5090-TRELLIS2.md](docs/RTX5090-TRELLIS2.md) on the computer that
 actually contains the RTX 5090. Run a single engine worker because the model
 occupies most of the 32GB VRAM.
+
+## Work on an 8GB GPU without fake generation
+
+`python scripts/diagnose_runtime.py` reports the GPU, free VRAM, installed
+dependencies and protected disk budget without installing or downloading
+anything. It does not claim that upstream memory figures prove local inference.
+
+When the actual task is a timber rail, crate slat or similar static surface,
+`scripts/surface_asset.py` can author a closed metric panel directly from a
+verified PBR source manifest. This CPU workflow outputs a textured GLB and
+verified maps; it is neither AI reconstruction nor a mock. It cannot infer a
+dog, a building interior or the unseen sides of an arbitrary object. See
+[the workflow and native-render evidence](docs/CPU_SURFACE_AUTHORING.md).

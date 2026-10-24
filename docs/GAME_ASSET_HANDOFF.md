@@ -1,5 +1,10 @@
 # Verified handoff to rigging tools
 
+For static timber surfaces on a workstation without an inference runtime, see
+the separate [CPU surface authoring workflow](CPU_SURFACE_AUTHORING.md). Its
+descriptor has a different kind and does not pass as AI generation through
+`--require-real`.
+
 `scripts/localforge_client.py` is a stdlib-only client for the existing engine
 API. This change ports the user's local CLI prototype into the remote project
 and adds an explicit fixture boundary and an offline handoff check. It does not
