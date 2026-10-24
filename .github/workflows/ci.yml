@@ -79,13 +79,13 @@ jobs:
         run: >-
           python -m compileall -q -f
           -x "(\.venv|runtime|__pycache__)"
-          engine
+          engine scripts
 
       - name: Lint engine sources
-        run: python -m ruff check engine
+        run: python -m ruff check engine scripts
 
       - name: Check engine formatting
-        run: python -m ruff format --check engine
+        run: python -m ruff format --check engine scripts
 
       - name: Audit engine dependencies
         run: python -m pip_audit -r engine/requirements.txt

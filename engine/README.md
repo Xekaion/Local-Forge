@@ -19,6 +19,13 @@ engine\.venv\Scripts\python.exe -m uvicorn app:app `
 The included `engine/start-engine.ps1` runs the same virtual environment and
 defaults to `mock` when `LOCALFORGE_BACKEND` is unset.
 
+For scripted generation, `python scripts/localforge_client.py generate IMAGE`
+uses this API and exports the verified GLB, engine manifest, and a hash-bound
+handoff descriptor. Add `--require-real` in asset production: the CLI rejects a
+mock engine before submitting and checks the result backend again. The offline
+`verify` command supports the same flag. See
+[`docs/GAME_ASSET_HANDOFF.md`](../docs/GAME_ASSET_HANDOFF.md).
+
 RTX 5090/TRELLIS.2:
 
 ```bash

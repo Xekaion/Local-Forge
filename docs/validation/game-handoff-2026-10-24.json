@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-24",
+  "upstream_base_commit": "9f543f6721a134ad5f13a57ce10fec0993159ad1",
+  "test_kind": "actual-local-http-mock-pipeline-not-ai-inference",
+  "status": "passed",
+  "paid_credits_used": 0,
+  "model_downloads": 0,
+  "actual_ai_inference_performed": false,
+  "game_asset_adopted": false,
+  "hardware": {
+    "gpu": "NVIDIA GeForce RTX 3070",
+    "vram_mib": 8192
+  },
+  "local_environment": {
+    "python": "3.13.3",
+    "torch_installed": false,
+    "trellis_root_configured": false,
+    "model_checkpoint_present": false
+  },
+  "source_cli_prototype_sha256": "e838ff07709950061337556931edd5e1fcb24ab102f55384cb2337fee596c30e",
+  "tested_cli_sha256": "d2cd836c4d50b82214c8c888d80cac0d071bd52e6743d6a807a6c1e7b1bf5a8e",
+  "input": {
+    "repository": "https://github.com/Xekaion/TheMusher-FPP",
+    "repository_path": "Docs/Captures/Sanctuary/RareDogPortrait.png",
+    "sha256": "27bee5f937ce8ea1e0a7ccf935efbe545b46b1d4aae1b351d8c79ecdf2c594e4",
+    "note": "Existing game-rendered dog portrait; overlays/harness remain. Not a clean production reconstruction input."
+  },
+  "engine": {
+    "backend": "mock",
+    "version": "0.2.0",
+    "schema_version": "1.0"
+  },
+  "result": {
+    "job_id": "4c357019e542487c9c91c33a21bb52cb",
+    "backend": "mock",
+    "is_mock": true,
+    "asset_role": "pipeline_fixture",
+    "rigging_ready": false,
+    "quality_approved": false,
+    "glb_sha256": "140a48cb6b656de4633fee436c9e4e5f0080422ed4f9675deb96fe565ae69e84",
+    "glb_bytes": 109416,
+    "manifest_sha256": "0d49340c1927aaba707f547d648368467e1e02ce91391a436d0f6fbe08d675ef",
+    "handoff_sha256": "c3aab4c9de985e903d923498ab33c8a00a9b5f74aa466f6d5f8c1b4d734e427d",
+    "geometry": {
+      "bounds": [
+        [
+          -0.7200000286102295,
+          -0.7200000286102295,
+          -0.8600000143051147
+        ],
+        [
+          0.7200000286102295,
+          0.7200000286102295,
+          0.7200000286102295
+        ]
+      ],
+      "face_count": 5376,
+      "finite": true,
+      "geometry_count": 2,
+      "vertex_count": 2692
+    }
+  },
+  "checks": {
+    "actual_local_http_generation_completed": true,
+    "offline_handoff_integrity_verified": true,
+    "strict_mock_submission_rejected_before_enqueue": true,
+    "strict_mock_export_rejected": true,
+    "existing_runtime_and_servers_unchanged": true,
+    "pytest_passed": 43,
+    "existing_engine_cases": 23,
+    "new_cli_cases": 20,
+    "compileall_passed": true,
+    "ruff_lint_passed": true,
+    "ruff_format_passed": true
+  },
+  "local_evidence": {
+    "report": "work/game-smoke/report.json",
+    "report_sha256": "f2be0d18e45f7aaf351da19bb4696e74db25b60074656822b0ff34a2845f09ca",
+    "artifacts": "work/game-smoke/fixture/",
+    "committed_binary_fixture": false
+  },
+  "limitations": [
+    "No torch/TRELLIS.2 source/checkpoint in existing environment",
+    "RTX3070 8GB is below documented TRELLIS.2 VRAM target",
+    "No AI model or animal was reconstructed; mock fixture tests I/O only"
+  ]
+}

@@ -21,6 +21,8 @@ with [HANDOFF.md](HANDOFF.md).
   manifest
 - Optional API token, local-origin/host restrictions, and terminal-job TTL
   cleanup
+- A stdlib-only CLI for generation, cancellation and verified GLB/manifest
+  handoffs; `--require-real` prevents mock fixtures entering an asset pipeline
 - Strict TypeScript/ESLint checks and same-origin/nosniff/frame/referrer/
   permissions headers on hosted web responses
 
@@ -73,6 +75,24 @@ See [engine/README.md](engine/README.md) for the API, all
 `LOCALFORGE_*` settings, authentication headers, persistence, and cleanup
 behavior.
 
+## Scripted game-asset handoff
+
+The CLI can use the same running engine without adding Python dependencies:
+
+```powershell
+python scripts/localforge_client.py health
+python scripts/localforge_client.py generate dog-reference.png --quality draft --out outputs/dog --require-real
+python scripts/localforge_client.py verify outputs/dog/dog-reference-JOB.asset.json --require-real
+```
+
+`generate` writes a GLB, its original engine manifest, and a `.asset.json`
+descriptor containing their hashes and the source image hash. `verify` works
+offline. Omit `--require-real` deliberately when exercising the mock bridge;
+the resulting descriptor says `pipeline_fixture`, `is_mock: true`, and
+`rigging_ready: false`. Successful verification checks integrity, never visual
+quality or rigging readiness. See [the handoff contract and measured
+limitations](docs/GAME_ASSET_HANDOFF.md).
+
 ## Quality gates
 
 The same CPU-safe checks can run on a computer without an NVIDIA GPU:
@@ -87,9 +107,9 @@ python -m venv engine\.venv
 engine\.venv\Scripts\python.exe -m pip install `
   -r engine\requirements.txt -r engine\requirements-dev.txt
 engine\.venv\Scripts\python.exe -m compileall -q -f `
-  -x "(\.venv|runtime|__pycache__)" engine
-engine\.venv\Scripts\python.exe -m ruff check engine
-engine\.venv\Scripts\python.exe -m ruff format --check engine
+  -x "(\.venv|runtime|__pycache__)" engine scripts
+engine\.venv\Scripts\python.exe -m ruff check engine scripts
+engine\.venv\Scripts\python.exe -m ruff format --check engine scripts
 engine\.venv\Scripts\python.exe -m pip_audit -r engine\requirements.txt
 engine\.venv\Scripts\python.exe -m pytest -q engine\tests
 ```
