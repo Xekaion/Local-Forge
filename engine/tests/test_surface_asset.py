@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import importlib.util
 import json
+import struct
 import sys
 from pathlib import Path
 
@@ -76,6 +77,9 @@ def test_closed_metric_glb_and_real_scalar_maps(sources, tmp_path):
     assert data["coordinates"] == {"unit": "metre", "up": "+Y", "front": "+Z"}
     assert data["derivation"]["absolute_height_inferred"] is False
     assert data["geometry"]["volume_m3"] > 0
+    normals = surface.explicit_glb_normals(output / "TimberPanel.glb")
+    assert len(normals) == data["geometry"]["vertices"]
+    assert np.allclose(np.linalg.norm(normals, axis=1), 1, atol=1e-4)
 
 
 def test_uvs_keep_grain_on_long_axis_and_no_collapsed_end_faces(sources, tmp_path):
@@ -186,3 +190,46 @@ def test_offline_verifier_fails_closed(sources, tmp_path, attack):
     path.write_text(json.dumps(data))
     with pytest.raises((ValueError, FileNotFoundError)):
         surface.verify_asset(path)
+
+
+def test_omitted_normal_accessor_cannot_hide_behind_lazy_importer(sources, tmp_path):
+    output, data = make(sources, tmp_path)
+    glb = output / "TimberPanel.glb"
+    scene = trimesh.load(glb, force="scene", process=False)
+    glb.write_bytes(trimesh.exchange.gltf.export_glb(scene, include_normals=False))
+    # Importers silently reconstruct these; that is not an explicit handoff.
+    imported = next(
+        iter(trimesh.load(glb, force="scene", process=False).geometry.values())
+    )
+    assert np.isfinite(imported.vertex_normals).all()
+    data["files"][glb.name] = {
+        "sha256": surface.sha256(glb),
+        "bytes": glb.stat().st_size,
+    }
+    descriptor = output / "surface.asset.json"
+    descriptor.write_text(json.dumps(data))
+    with pytest.raises(ValueError, match="explicit NORMAL"):
+        surface.verify_asset(descriptor)
+
+
+@pytest.mark.parametrize("bad_normal", [(0, 0, 0), (float("nan"), 0, 1)])
+def test_nonunit_or_nonfinite_normal_bytes_are_rejected(sources, tmp_path, bad_normal):
+    output, data = make(sources, tmp_path)
+    glb = output / "TimberPanel.glb"
+    raw = bytearray(glb.read_bytes())
+    length = struct.unpack_from("<I", raw, 12)[0]
+    tree = json.loads(raw[20 : 20 + length])
+    primitive = tree["meshes"][0]["primitives"][0]
+    accessor = tree["accessors"][primitive["attributes"]["NORMAL"]]
+    view = tree["bufferViews"][accessor["bufferView"]]
+    offset = 28 + length + view.get("byteOffset", 0) + accessor.get("byteOffset", 0)
+    struct.pack_into("<fff", raw, offset, *bad_normal)
+    glb.write_bytes(raw)
+    data["files"][glb.name] = {
+        "sha256": surface.sha256(glb),
+        "bytes": glb.stat().st_size,
+    }
+    descriptor = output / "surface.asset.json"
+    descriptor.write_text(json.dumps(data))
+    with pytest.raises(ValueError, match="finite unit vectors"):
+        surface.verify_asset(descriptor)

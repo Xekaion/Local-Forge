@@ -1,0 +1,279 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-24",
+  "kind": "localforge-surface-authoring-exercise",
+  "tool_baseline_commit": "921d84775876534b4f6dc2a210d5be0e20803493",
+  "replaces_glb_sha256": "58d887a85fade115a7812ff1da48431e83f2fd23143b7834fd1d560801732d31",
+  "v4_to_v5_comparison": {
+    "positions_identical": true,
+    "indices_identical": true,
+    "uvs_identical": true,
+    "map_bytes_identical": true
+  },
+  "interchange_fix": "Explicit float32 angle-weighted unit NORMAL accessor required in published binary; lazy import reconstruction cannot satisfy verification.",
+  "asset_kind": "localforge-surface-asset",
+  "adoptable_artifact": "work/timber-panel-v5/TimberPanel.glb",
+  "glb_sha256": "dde12bd9f2041f022558ebe4a4c63d411bc9cf954df5b33fb84e39fc25e51365",
+  "descriptor_sha256": "6f1964ccd781a2118f16f5f40d29f28de67a9e9e18294023e2755d098665bada",
+  "source": {
+    "manifest_sha256": "1f44ca3a6fd2e536c165a2a9808bf490950f5ccfea344147b128ca5cc01f012b",
+    "material": "rough_wood",
+    "license": "CC0-1.0",
+    "license_url": "https://polyhaven.com/license",
+    "source_url": "https://polyhaven.com/a/rough_wood",
+    "authors": {
+      "Rob Tuytel": "All"
+    },
+    "dimensions_m": [
+      0.5,
+      0.5
+    ],
+    "maps": {
+      "BaseColor": {
+        "file": "rough_wood/rough_wood_diff_2k.png",
+        "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/2k/rough_wood/rough_wood_diff_2k.png",
+        "sha256": "fba12c4eae067fd78fdc0d9f8e59a3569b5d362c273c9454dcf782a19d513ddc",
+        "publisher_md5": "ac65dc0b19c59128da8d0198b0edd9c4",
+        "bytes": 7806028,
+        "color_space": "sRGB"
+      },
+      "NormalGL": {
+        "file": "rough_wood/rough_wood_nor_gl_2k.png",
+        "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/2k/rough_wood/rough_wood_nor_gl_2k.png",
+        "sha256": "5507853e98e893d739e77c7a1662bb28fb976fc450fb66715733e66f9b1d15f0",
+        "publisher_md5": "198eec08d20acddfd651956fba2fc538",
+        "bytes": 6604342,
+        "color_space": "linear"
+      },
+      "Roughness": {
+        "file": "rough_wood/rough_wood_rough_2k.png",
+        "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/2k/rough_wood/rough_wood_rough_2k.png",
+        "sha256": "1914654d9227ab49b9d5caaeac1fd37178819ffd780eab1d02e14c2a7cc268fd",
+        "publisher_md5": "40e8cca6a79e9ab88fc1d8b9fed6a580",
+        "bytes": 7260975,
+        "color_space": "linear"
+      },
+      "AO": {
+        "file": "rough_wood/rough_wood_ao_2k.png",
+        "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/2k/rough_wood/rough_wood_ao_2k.png",
+        "sha256": "243e72d0d4d41b59b75288a40c19874b5b9b1787ab3bb53b5a1b4c99f1855200",
+        "publisher_md5": "68e495538650801ee7c4b76df00a3403",
+        "bytes": 3276537,
+        "color_space": "linear"
+      }
+    }
+  },
+  "dimensions_m": {
+    "width": 0.9,
+    "height": 0.16,
+    "thickness": 0.04,
+    "bevel": 0.003
+  },
+  "geometry": {
+    "vertices": 1539,
+    "topological_vertices": 1231,
+    "triangles": 2458,
+    "watertight": true,
+    "winding_consistent": true,
+    "bounds_m": [
+      [
+        -0.45000000000000007,
+        -0.08,
+        -0.02
+      ],
+      [
+        0.45000000000000007,
+        0.08,
+        0.02029999904334545
+      ]
+    ],
+    "volume_m3": 0.005761164671324239,
+    "explicit_normal_count": 1539
+  },
+  "files": {
+    "TimberPanel.glb": {
+      "sha256": "dde12bd9f2041f022558ebe4a4c63d411bc9cf954df5b33fb84e39fc25e51365",
+      "bytes": 5981316
+    },
+    "TimberPanel_AO.png": {
+      "sha256": "77b3b663ceeb9c5f5de27921bb1cb4af2bcaad8de2116bfc8d86327912fa38ab",
+      "bytes": 680965
+    },
+    "TimberPanel_BaseColor.png": {
+      "sha256": "4a9d0d45e1afdef831e87dd995399b3f324338bf3c115621bd48e5789c296b35",
+      "bytes": 1831845
+    },
+    "TimberPanel_NormalGL.png": {
+      "sha256": "27637014c8845cfdbb5aa4d7410a9e63808c2d9bef619bddfc639ffa010fed4d",
+      "bytes": 1957389
+    },
+    "TimberPanel_ORM.png": {
+      "sha256": "887352d70f2285c14f3ec9fe646910404a4663f7ce1c0fb5ad17eb77205402cc",
+      "bytes": 1430330
+    },
+    "TimberPanel_RelativeHeight.png": {
+      "sha256": "8ed32bc47373eb5ca148808c4da9a5c589c5df3c61e42ea55addc093ce5e77bf",
+      "bytes": 1431299
+    },
+    "TimberPanel_Roughness.png": {
+      "sha256": "ac1936c1a6c09402e6786636d256e2b655c5f37ee37aaa89d9b911dca8ac7218",
+      "bytes": 472104
+    }
+  },
+  "derivation": {
+    "method": "periodic least-squares normal integration",
+    "absolute_height_inferred": false,
+    "authored_relief_peak_to_peak_mm": 0.6,
+    "source_albedo_delighted": false,
+    "uv_scale": "source physical dimensions",
+    "fibre_alignment": "texture V along panel long X axis",
+    "cut_edge_material": "axis-projected source timber; no end-grain reconstruction",
+    "vertex_normals": "explicit float32 angle-weighted normals, split at six planar UV islands"
+  },
+  "native_render": {
+    "schema_version": 1,
+    "engine": "Blender Cycles",
+    "device": "CPU",
+    "samples": 48,
+    "blender": "4.2.0",
+    "input_glb_sha256": "dde12bd9f2041f022558ebe4a4c63d411bc9cf954df5b33fb84e39fc25e51365",
+    "native_import_meshes": 1,
+    "vertices": 1539,
+    "polygons": 2458,
+    "normal_linked": true,
+    "roughness_linked": true,
+    "renders": [
+      {
+        "file": "PanelFront.png",
+        "sha256": "20d19871192a5d6f907ced3eede192066fea13f2d80ac072051205d994753957",
+        "width": 1200,
+        "height": 720
+      },
+      {
+        "file": "BevelEnd.png",
+        "sha256": "eb74a5a7bc8c731c9f8c2c97cd0acab9ead469174fa4552ca8ce74f4458542dc",
+        "width": 1200,
+        "height": 720
+      },
+      {
+        "file": "GrazingGrain.png",
+        "sha256": "c3378c97bca5e6ffbc26798bd2b654430784a9d8dd5f583266f3ef398836e85a",
+        "width": 1200,
+        "height": 720
+      }
+    ],
+    "quality_approved": false,
+    "paid_calls": 0
+  },
+  "visual_review": {
+    "reviewer": "Codex agent",
+    "images_actually_viewed": [
+      "PanelFront.png",
+      "BevelEnd.png",
+      "GrazingGrain.png"
+    ],
+    "fibre_alignment_corrected": true,
+    "bevel_and_closed_end_visible": true,
+    "roughness_and_normal_connected": true,
+    "end_grain_reconstructed": false,
+    "aaa_quality_approved": false,
+    "game_integration_verified_by_this_tool_trial": false
+  },
+  "preflight": {
+    "schema_version": 1,
+    "kind": "localforge-runtime-preflight",
+    "read_only": true,
+    "disk_free_bytes": 4997115904,
+    "protected_disk_reserve_gib": 4.0,
+    "additional_install_budget_gib": 8.0,
+    "disk_budget_ok": false,
+    "gpu": {
+      "name": "NVIDIA GeForce RTX 3070",
+      "total_mib": 8192,
+      "free_mib": 6388,
+      "compute_capability": 8.6
+    },
+    "torch_installed": false,
+    "trellis_adapter": {
+      "source_present": false,
+      "hardware_policy_met": false,
+      "preflight_passed": false,
+      "inference_readiness_confirmed": false,
+      "blocking_reasons": [
+        "PyTorch is not installed in this Python environment.",
+        "TRELLIS2_ROOT does not name an installed source checkout.",
+        "The current TRELLIS.2 adapter requires compute capability 12 or newer.",
+        "The requested download/install budget would consume the protected disk reserve."
+      ]
+    },
+    "lower_memory_research_candidates": [
+      {
+        "name": "TripoSR",
+        "official_source": "https://github.com/VAST-AI-Research/TripoSR",
+        "upstream_default_vram_gib": 6,
+        "total_vram_meets_upstream_default": true,
+        "free_vram_meets_upstream_default": true,
+        "adapter_implemented": false,
+        "weights_downloaded_by_preflight": false,
+        "inference_tested": false,
+        "license_note": "MIT code and pretrained models; retain notices"
+      },
+      {
+        "name": "Stable Fast 3D",
+        "official_source": "https://github.com/Stability-AI/stable-fast-3d",
+        "upstream_default_vram_gib": 6,
+        "total_vram_meets_upstream_default": true,
+        "free_vram_meets_upstream_default": true,
+        "adapter_implemented": false,
+        "weights_downloaded_by_preflight": false,
+        "inference_tested": false,
+        "license_note": "Stability AI Community License; gated weights; verify commercial eligibility"
+      }
+    ],
+    "available_cpu_workflow": "scripts/surface_asset.py: licensed PBR timber surface authoring; not AI reconstruction",
+    "inference_runs": 0,
+    "paid_calls": 0,
+    "network_calls": 0,
+    "limitations": [
+      "Package presence does not prove compatible CUDA, weights or inference success.",
+      "Upstream default VRAM is not a measured guarantee for this workstation.",
+      "No download or untested candidate adapter is selected automatically."
+    ]
+  },
+  "validation": {
+    "python_tests_passed": 71,
+    "new_surface_tests": 24,
+    "new_preflight_tests": 4,
+    "ruff_check_passed": true,
+    "ruff_format_passed": true,
+    "compileall_passed": true,
+    "offline_glb_verifier_passed": true,
+    "warning": "Existing Starlette/httpx deprecation warning."
+  },
+  "implementation_sha256": {
+    "scripts/surface_asset.py": "5b07acdd195b4a40f2e5b6766a9a3edcb22d2424bb66bef18b73225db1ba10e8",
+    "scripts/diagnose_runtime.py": "48f3175d89e9b9c63bfebc21e1fcc2153b3d4d05778fdba5dbc3bcff86fb76e9",
+    "scripts/render_surface_review.py": "1551621114b5f17d3a3f3a482c65fa293836062c110ce24bcb549d08f6b2919e",
+    "engine/tests/test_surface_asset.py": "995d6dc41d423288fe5a9644dd3edae76764102cc7ed8b161dd832723695e6a8",
+    "engine/tests/test_runtime_preflight.py": "82b0fe22fa3d5e9eef1c01ba5649633151ae918656047b4095b2a93f12349d27"
+  },
+  "upstream_research": [
+    "https://github.com/VAST-AI-Research/TripoSR",
+    "https://github.com/Stability-AI/stable-fast-3d",
+    "https://stability.ai/license",
+    "https://polyhaven.com/license",
+    "https://polyhaven.com/a/rough_wood"
+  ],
+  "inference_runs": 0,
+  "generation_network_calls": 0,
+  "paid_calls": 0,
+  "mock_backend_unchanged": true,
+  "require_real_boundary_unchanged": true,
+  "model_weights_downloaded": false,
+  "limitations": [
+    "Static timber surfaces only; no unseen-object reconstruction.",
+    "Cut edges use axis-projected timber; end-grain is not reconstructed.",
+    "Height scale is authored; source normals cannot prove absolute dimensions.",
+    "Visual approval and engine integration remain separate."
+  ]
+}

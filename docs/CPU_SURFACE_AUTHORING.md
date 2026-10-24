@@ -97,8 +97,8 @@ detect accidental changes; they do not authenticate an untrusted publisher.
 
 ## Actual native exercise, 2026-10-24
 
-The fixed v4 output GLB SHA-256 is
-`58d887a85fade115a7812ff1da48431e83f2fd23143b7834fd1d560801732d31`.
+The fixed v5 output GLB SHA-256 is
+`dde12bd9f2041f022558ebe4a4c63d411bc9cf954df5b33fb84e39fc25e51365`.
 The asset was reloaded by trimesh and imported into Blender 4.2.0. Three actual
 1200 × 720 Cycles CPU renders, 48 samples each, show the front, bevel/end and
 grazing grain. PBR normal and roughness connections were checked in Blender.
@@ -112,17 +112,29 @@ Reproduce native inspection with an existing Blender installation:
 blender --background --factory-startup --python scripts/render_surface_review.py -- outputs/timber-panel outputs/timber-review
 ```
 
-The tracked [exercise receipt](validation/surface-authoring-2026-10-24.json)
+The tracked [exercise receipt](validation/surface-authoring-v5-2026-10-24.json)
 binds the actual output and native PNG hashes. Local raw outputs stay under
 ignored `work/`; a consuming game should preserve the adopted GLB, descriptor,
 source licence and source hashes in its own asset inventory.
 
-All 68 Python tests pass: 43 existing cases plus 21 surface and four preflight
+All 71 Python tests pass: 43 existing cases plus 24 surface and four preflight
 cases. The new cases check normal integration against an analytic surface,
 uint16 scalar conversion, real GLB closure/UVs/physical bounds, input limits,
 source tampering, output tampering and false approval/backend identities.
 Ruff and compilation also pass. The existing Starlette/httpx deprecation
 warning remains. The web application was unchanged.
+
+The game integration caught a missing interchange requirement in v4: glTF
+allows NORMAL to be omitted, and importers can silently calculate normals.
+Those lazy values had passed the initial verifier without proving that the
+GLB actually contained the attribute. V5 explicitly calculates angle-weighted
+vertex normals on the six separated UV islands and exports float32 NORMAL
+with `include_normals=True, unitize_normals=True`. The verifier now parses the
+published GLB bytes and requires exactly one finite unit normal per position.
+Regression cases remove the accessor or replace vectors with zero/NaN while
+updating checksums; all must fail. Native Blender inspection was repeated for
+v5. Positions, indices, UVs and all PNG map bytes match v4 exactly; v5 has a new
+container hash and a new descriptor. The original v4 receipt remains historical.
 
 ## Lower-memory inference remains a separate task
 

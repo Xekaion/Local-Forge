@@ -11,6 +11,7 @@ import hashlib
 import json
 import math
 import os
+import struct
 import tempfile
 from pathlib import Path
 from typing import Any
@@ -25,6 +26,57 @@ from trimesh.visual.texture import TextureVisuals
 
 def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def explicit_glb_normals(path: Path) -> np.ndarray:
+    """Inspect published bytes; lazy importer normals can hide an omitted accessor."""
+    raw = path.read_bytes()
+    if len(raw) < 28 or struct.unpack_from("<4sII", raw) != (b"glTF", 2, len(raw)):
+        raise ValueError("Invalid GLB 2.0 container.")
+    json_length, kind = struct.unpack_from("<I4s", raw, 12)
+    if kind != b"JSON":
+        raise ValueError("GLB JSON chunk is missing.")
+    tree = json.loads(raw[20 : 20 + json_length])
+    binary_header = 20 + json_length
+    binary_length, binary_kind = struct.unpack_from("<I4s", raw, binary_header)
+    if binary_kind != b"BIN\x00" or binary_header + 8 + binary_length != len(raw):
+        raise ValueError("GLB binary chunk is missing or invalid.")
+    primitives = [
+        primitive for mesh in tree["meshes"] for primitive in mesh["primitives"]
+    ]
+    if len(primitives) != 1 or "NORMAL" not in primitives[0]["attributes"]:
+        raise ValueError("Authored surfaces require an explicit NORMAL accessor.")
+    attributes = primitives[0]["attributes"]
+    accessor = tree["accessors"][attributes["NORMAL"]]
+    position = tree["accessors"][attributes["POSITION"]]
+    if (
+        accessor["componentType"] != 5126
+        or accessor["type"] != "VEC3"
+        or accessor["count"] != position["count"]
+        or "sparse" in accessor
+    ):
+        raise ValueError("NORMAL must be one float32 unit vector per position.")
+    view = tree["bufferViews"][accessor["bufferView"]]
+    stride = view.get("byteStride", 12)
+    offset = accessor.get("byteOffset", 0)
+    needed = (accessor["count"] - 1) * stride + 12
+    if stride < 12 or stride % 4 or offset + needed > view["byteLength"]:
+        raise ValueError("NORMAL accessor exceeds its buffer view.")
+    start = view.get("byteOffset", 0) + offset
+    if view.get("buffer", 0) != 0 or start + needed > binary_length:
+        raise ValueError("NORMAL accessor exceeds the binary buffer.")
+    normals = np.ndarray(
+        (accessor["count"], 3),
+        dtype="<f4",
+        buffer=raw,
+        offset=binary_header + 8 + start,
+        strides=(stride, 4),
+    ).copy()
+    if not np.isfinite(normals).all() or not np.allclose(
+        np.linalg.norm(normals, axis=1), 1, atol=1e-4
+    ):
+        raise ValueError("Explicit vertex normals must be finite unit vectors.")
+    return normals
 
 
 def load_sources(manifest_path: Path, material: str) -> tuple[dict, dict]:
@@ -323,7 +375,17 @@ def generate_asset(
         for kind, image in maps.items():
             image.save(staging / f"TimberPanel_{kind}.png")
         glb_path = staging / "TimberPanel.glb"
-        glb_path.write_bytes(scene.export(file_type="glb"))
+        # Explicitly export angle-weighted normals; the default exporter can
+        # silently omit them when the lazy vertex-normal cache is still empty.
+        computed_normals = export_mesh.vertex_normals
+        if not np.isfinite(computed_normals).all():
+            raise ValueError("Computed angle-weighted vertex normals are non-finite.")
+        glb_path.write_bytes(
+            trimesh.exchange.gltf.export_glb(
+                scene, include_normals=True, unitize_normals=True
+            )
+        )
+        published_normals = explicit_glb_normals(glb_path)
         reloaded = trimesh.load(glb_path, force="scene", process=False)
         if len(reloaded.geometry) != 1 or not np.allclose(
             reloaded.bounds, mesh.bounds, atol=1e-6
@@ -356,6 +418,7 @@ def generate_asset(
                 "uv_scale": "source physical dimensions",
                 "fibre_alignment": "texture V along panel long X axis",
                 "cut_edge_material": "axis-projected source timber; no end-grain reconstruction",
+                "vertex_normals": "explicit float32 angle-weighted normals, split at six planar UV islands",
             },
             "geometry": {
                 "vertices": len(export_mesh.vertices),
@@ -365,6 +428,7 @@ def generate_asset(
                 "winding_consistent": bool(mesh.is_winding_consistent),
                 "bounds_m": mesh.bounds.tolist(),
                 "volume_m3": mesh.volume,
+                "explicit_normal_count": len(published_normals),
             },
             "textures": {
                 "resolution": resolution,
@@ -445,10 +509,13 @@ def verify_asset(descriptor_path: Path) -> dict[str, Any]:
     }
     if set(data["files"]) != required:
         raise ValueError("Unexpected or missing surface artifacts.")
+    normals = explicit_glb_normals(root / "TimberPanel.glb")
     scene = trimesh.load(root / "TimberPanel.glb", force="scene", process=False)
     if len(scene.geometry) != 1:
         raise ValueError("Expected a single-primitive authored surface.")
     mesh = next(iter(scene.geometry.values()))
+    if len(normals) != data["geometry"].get("explicit_normal_count"):
+        raise ValueError("Explicit normal count differs from the descriptor.")
     if (
         len(mesh.vertices) != data["geometry"]["vertices"]
         or len(mesh.faces) != data["geometry"]["triangles"]
